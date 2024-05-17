@@ -1,14 +1,20 @@
-# Use a base image
-FROM nginx:alpine
+# Use an official Python runtime as a parent image
+FROM python:3.9
 
-# Set the working directory
-WORKDIR /usr/share/nginx/html
+# Set the working directory inside the container
+WORKDIR /app
 
-# Copy the necessary files to the container
+# Copy the requirements file into the container
+COPY requirements.txt .
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code into the container
 COPY . .
 
-# Expose a port
+# Expose the flask application to port 5000
 EXPOSE 5000
 
-# Start the nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Specify the command to run when the container starts
+CMD ["python", "app.py"]

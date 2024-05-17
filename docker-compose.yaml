@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  backend:
+    image: nebula-front:v1
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_DB=${MYSQL_DB}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+  frontend:
+    image: nebula-back:v1
+    ports:
+      - "8080:8080"
