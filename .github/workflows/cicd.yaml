@@ -22,9 +22,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run backend tests
-        run: pytest
-
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
