@@ -14,24 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
+      - name: Build backend Docker image
+        run: docker build -t paulapaulina/nebula-backend:latest -f Dockerfile .
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install frontend dependencies and build
-        run: |
-          cd frontend
-          npm install
-          npm run build
+      - name: Build frontend Docker image
+        run: docker build -t paulapaulina/nebula-frontend:latest -f frontend/Dockerfile .
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -39,15 +26,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker images
-        run: |
-          docker build -t paulapaulina/nebula-backend:latest -f Dockerfile .
-          docker build -t paulapaulina/nebula-frontend:latest -f front-end/Dockerfile .
-      
-      - name: Push Docker images
-        run: |
-          docker push paulapaulina/nebula-backend:latest
-          docker push paulapaulina/nebula-frontend:latest
+      - name: Push backend Docker image
+        run: docker push paulapaulina/nebula-backend:latest
+
+      - name: Push frontend Docker image
+        run: docker push paulapaulina/nebula-frontend:latest
 
   deploy:
     name: Deploy to AWS
@@ -73,19 +56,19 @@ jobs:
       - name: Deploy application
         run: docker-compose up -d
 
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.8.3
+      #- name: Set up Terraform
+      #  uses: hashicorp/setup-terraform@v1
+       # with:
+       #   terraform_version: 1.8.3
 
-      - name: Terraform Init
-        run: terraform init
+     # - name: Terraform Init
+     #   run: terraform init
 
-      - name: Terraform Plan
-        run: terraform plan
+    #  - name: Terraform Plan
+     #   run: terraform plan
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
-        env:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+     # - name: Terraform Apply
+     #   run: terraform apply -auto-approve
+     #   env:
+      #    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+       #   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
