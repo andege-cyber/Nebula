@@ -14,6 +14,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Debug: List files in the working directory
+        run: ls -la
+
       - name: Build backend Docker image
         run: docker build -t paulapaulina/nebula-backend:latest -f Dockerfile .
 
@@ -41,6 +44,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Debug: List files in the working directory
+        run: ls -la
 
       - name: Set up Docker Compose
         run: |
