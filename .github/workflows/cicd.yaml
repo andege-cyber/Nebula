@@ -54,5 +54,5 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Deploy application
-        run: docker-compose up -d
         working-directory: ./Nebula
+        run: docker-compose up -d
